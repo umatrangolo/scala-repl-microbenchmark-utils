@@ -1,0 +1,98 @@
+The goal is to have a lightweight microbenchmarking framework for Scala that is available through the REPL.
+
+Hypotetic scenarios:
+
+// Generic sorter
+trait Sorter {
+  def sort(as: Array[T]): Array[T] 
+}
+
+// Bubble sorter
+object BubbleSorter extends Sorter {
+  override def sort(as: Array[T]): Array[T] = { // ... bubble sort impl }
+}
+
+object QuickSorter extends Sorter {
+  override def sort(as: Array[T]): Array[T] = { // ... quick sort impl }
+}
+
+// [.. other sorters ...]
+
+// What I would like to do:
+
+val as = Array({100000 random numbers})
+
+// would be nice to have some utils to generate test sets:
+
+val as1 = Generator.generate[Int](10, 1000) randomly // generate 10 arrays of 1000 random ints
+val as2 = Generator.generate[Int](10, 1000) randomly withPoisson // generate 10 array os 1000 random ints 
+    	  			      	    	     		 // distributed with Possion 
+
+val report1 = Timer.time(100) { BubbleSorter.sort(as1) }
+val report2 = Timer.time(100) { BubbleSorter.sort(as2) }
+
+val report2 = Timer.time(100) { QuickSorter.sort(as) }
+
+// look at which one is faster!
+
+// Container
+trait Dictionary {
+  def contains(s: String): Option[Int] // given a String gives back its pos in the dict or None
+}
+
+trait HashSetDictionary(ls: List[String]) {
+  override def contains(s: String): Option[Int] = { // ... finds ths string in the Set }   
+}
+
+trait HashTrieDictionary(ls: List[String]) {
+  override def contains(s: String): Option[Int] = { // ... finds ths string in the Trie }  
+}
+
+// [ .. other dicts .. ]
+
+val ls = List[String]({100000 random strings})
+
+val dict1 = new HashSetDictionary(ls)
+val dict2 = new HashTrieDictionary(ls)
+
+val report1 = Timer.time(10000) { dict1.contains(randomString()) }
+val report2 = Timer.time(10000) { dict2.contains(randomString()) }
+
+// which one is faster ???
+
+--
+
+object Timer {
+  def time(f: => Unit) {
+    println("Now is %s".format(System.currentTimeMillis))
+    f
+    println("End is %s".format(System.currentTimeMillis))
+  }
+}
+
+scala> Timer.time { println("Hello World!") }
+Now is 1330815232374
+Hello World!
+End is 1330815232375
+
+scala> trait Sorter { def sort(as: Array[Long]): Array[Long] }
+
+scala> object BubbleSorter extends Sorter { override def sort(as: Array[Long]): Array[Long] = as.sortWith { (e1, e2) => e1 < e2} }
+defined class BubbleSorter
+
+scala> object QuickSorter extends Sorter { override def sort(as: Array[Long]): Array[Long] = as.sortWith { (e1, e2) => e1 < e2} }
+defined class QuickSorter
+
+// need to know which one is faster ??
+
+scala> Timer.time { BubbleSorter.sort(a.toArray) }
+Now is 1330815976782
+End is 1330815976786
+
+scala> Timer.time { QuickSorter.sort(a.toArray) }
+Now is 1330815984218
+End is 1330815984222
+
+
+
+
