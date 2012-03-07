@@ -60,7 +60,15 @@ val report2 = Timer.time(10000) { dict2.contains(randomString()) }
 
 // which one is faster ???
 
---
+-- Worked yday: very nice. Its based on by-name parameter. In Scala, you can pass a function to 
+another function as a parameter:
+
+val sayHello = println("Hello World!")
+
+val greet(f: () => Unit) { println("["); sayHello(); println("]") }
+
+// if I run this:
+
 
 object Timer {
   def time(f: => Unit) {
