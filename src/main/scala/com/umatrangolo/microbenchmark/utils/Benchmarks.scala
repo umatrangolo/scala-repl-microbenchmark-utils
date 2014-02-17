@@ -5,14 +5,16 @@ object Logger { // TODO replace with Console
   def log(msg: String) { println("[%s] -- %s ".format(new java.util.Date, msg)) }
 }
 
-/** This encapsulates the timings of a test run.
+/** 
+  * This encapsulates the timings of a test run.
   *
   * @param name identifier of this test outcome
   * @param time an array of ''Long'' with the times taken by each run of the test.
   */
 case class Outcome(name: Option[String] = None, var times: List[Long]) {
   
-  /** Represents a single time outcome of a test run
+  /** 
+    * Represents a single time outcome of a test run
     *
     * @param time a ''Long'' with the time in ns (default time unit)
     */
@@ -30,7 +32,8 @@ case class Outcome(name: Option[String] = None, var times: List[Long]) {
   val all = times map { Timing(_) }  
 }
 
-/** Time units supported by the benchmark utils.
+/** 
+  * Time units supported by the benchmark utils.
   *
   * All the test runs are measured using the ns time unit. Each TimeUnit instance
   * defines an '''apply()''' method to convert from ns to one of the other supported
@@ -54,6 +57,12 @@ object TimeUnit extends Enumeration {
 
 import TimeUnit._
 
+/** 
+  * Simple brief summary of the outcome of the test.
+  *
+  * @param outcome the ''Outcome'' object that holds the results of the test.
+  * @param timeUnit the ''TimeUnit'' that will be used to show the results. (default: Nanoseconds)
+  */ 
 case class Summary(outcome: Outcome, timeUnit: TimeUnit = TimeUnit.Nanoseconds) {
 
   def timeUnit(unit: TimeUnit): Summary = this.copy(timeUnit = unit)
@@ -73,12 +82,14 @@ case class Summary(outcome: Outcome, timeUnit: TimeUnit = TimeUnit.Nanoseconds) 
   override def toString = tabulate
 }
 
-/** Main object that provides the time() method to time benchmark a series of n executions
+/** 
+  * Main object that provides the time() method to time benchmark a series of n executions
   * of a given function.
   */ 
 object Timer {
 
-  /** Main method that performs the timing of the method.
+  /** 
+    * Main method that performs the timing of the method.
     *
     * @param n number of times the tracked method should be invoked.
     * @param f function being tracked

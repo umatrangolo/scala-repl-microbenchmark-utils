@@ -1,7 +1,0 @@
--- Scala REPL micro benchmark utils
-
-These are a set of small utils to be imported and used while micro benchmarking code
-inside your Scala REPL.
-
-ugo.matrangolo@gmail.com
-
